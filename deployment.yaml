@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: text-similarity
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: text-similarity
+  template:
+    metadata:
+      labels:
+        name: text-similarity
+        app: text-similarity
+    spec:
+      containers:
+        - name: gke-project
+          image: gcr.io/gke-flask-project/text-similarity
+          ports:
+            - containerPort: 8080
+          env:
+            - name: PORT
+              value: "8080"
