@@ -18,6 +18,13 @@ The model size here is very huge because LASER AND BERT models require torch (75
 
 **Steps to be follwed for Kubernetes Deployment in GCP**
 
+The two main steps for deployment are
+
+1. Create Docker Image of your github repo and tag it to the Google Container Registry (gcr)
+2. Deploy the Docker Image present in the container repo to Kubernetes Cluster 
+
+Below are the detailed steps to be followed 
+
 **A) Create the Docker Image and tag it to the google container registry gcr.io**
 
 1. To ignore the cache files while creating Docker Image create a .dockerignore file and put the below text in it
@@ -27,13 +34,14 @@ README.md
 *.pyd
 
 2. Set the project
-Gcloud config get-value project 
-Gcloud config set project <PROJECT-ID>
+gcloud config get-value project  # Gives the project name that is set for billing in GCP
+gcloud config set project <PROJECT-ID> # You can change the project for billing purposes
 
 3. To build a Docker Image and tag it to the Google Container repository (gcr.io)
-Gcloud builds submit --tag gcr.io/PROJECT-ID/<giveanametorepository>
+gcloud builds submit --tag gcr.io/PROJECT-ID/<giveanametorepository>     # Container Repo is somewhat similar to Github Repo
 
-4. Once the image is built copy the docker image link and paste it in deployment.yaml file
+4. yaml files are config files used in apps where data is stored/transmitted. 
+Once the image is built copy the docker image link and paste it in deployment.yaml file  
 
 5. Docker Images will install all the dependancies required for the application
 
@@ -56,18 +64,23 @@ gcloud container clusters create flask-app \
 2. To enable and deploy the application change replica to 1 (enables) from 0 (disables cluster) in deployment.yaml file
 
 3. To run the deployment.yaml file and enable the app
-Kubectl apply -f deployment.yaml
+kubectl apply -f deployment.yaml
 
 4. To run the service.yaml file to generate the External API which can be accessed by public 
-Kubectl apply -f service.yaml
+kubectl apply -f service.yaml
 
 5. Some useful commands to know the status of deployment, service and also the pods
-Kubectl get deployments 
-Kubectl get services
-Kubectl get pods
+kubectl get deployments 
+kubectl get services
+kubectl get pods
 
 6. To run the External IP in gcloud console and get the output
-Curl <External IP Address>
+curl <External IP Address>
+  
+Finally! The app is deployed and can be accessed by entering the External IP in any of your browser. 
+
+1. You might get server 500 error which often means that steps for deployment have not been followed properly. 
+2. If the dependencies to run the application require more space then accordingly the Cluster size should be increased with more nodes
   
 
 **Here is the photo of deployed application in GKE Cluster**
